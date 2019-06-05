@@ -13,6 +13,7 @@ namespace Our.Umbraco.GoldenGate.uSync
         public void Compose(Composition composition)
         {
             composition.RegisterUnique<ISyncSerializer<IContentType>, ContentTypeSerializer>();
+            composition.RegisterUnique<ISyncSerializer<ITemplate>, TemplateSerializer>();
         }
     }
 }
