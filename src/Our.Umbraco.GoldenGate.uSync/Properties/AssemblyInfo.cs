@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Our.Umbraco.GoldenGate")]
-[assembly: AssemblyDescription("A series of extensions, helpers, and libraries designed to smooth over migrating from Umbraco 7 to Umbraco 8")]
+[assembly: AssemblyTitle("Our.Umbraco.GoldenGate.uSync")]
+[assembly: AssemblyDescription("A tool for importing Umbraco 7 uSync definitions into Umbraco 8")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Callum Whyte")]
-[assembly: AssemblyProduct("Our.Umbraco.GoldenGate")]
+[assembly: AssemblyProduct("Our.Umbraco.GoldenGate.uSync")]
 [assembly: AssemblyCopyright("Copyright © 2019 Callum Whyte, and other contributors")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("c228ceb6-5615-42cd-a19e-ee6f8862b26d")]
+[assembly: Guid("de734f44-8b2b-43e5-9f21-86e3561ff743")]
 
 // Version information for an assembly consists of the following four values:
 //
