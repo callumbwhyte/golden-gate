@@ -141,6 +141,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SerializerComposer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Our.Umbraco.GoldenGate.uSync.nuspec" />
