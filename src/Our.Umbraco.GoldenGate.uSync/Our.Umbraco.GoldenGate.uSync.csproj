@@ -143,6 +143,7 @@
     <Compile Include="Helpers\PropertyTypeHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Serialization\ContentTypeSerializer.cs" />
+    <Compile Include="Serialization\DataTypeSerializer.cs" />
     <Compile Include="Serialization\TemplateSerializer.cs" />
     <Compile Include="SerializerComposer.cs" />
   </ItemGroup>

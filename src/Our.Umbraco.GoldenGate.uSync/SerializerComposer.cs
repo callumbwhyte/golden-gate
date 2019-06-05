@@ -14,6 +14,7 @@ namespace Our.Umbraco.GoldenGate.uSync
         {
             composition.RegisterUnique<ISyncSerializer<IContentType>, ContentTypeSerializer>();
             composition.RegisterUnique<ISyncSerializer<ITemplate>, TemplateSerializer>();
+            composition.RegisterUnique<ISyncSerializer<IDataType>, DataTypeSerializer>();
         }
     }
 }
