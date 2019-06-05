@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Xml.Linq;
+using Our.Umbraco.GoldenGate.uSync.Helpers;
 using Umbraco.Core.Logging;
 using Umbraco.Core.Models;
 using Umbraco.Core.Services;
@@ -52,12 +53,36 @@ namespace Our.Umbraco.GoldenGate.uSync.Serialization
             contentType.Add(new XAttribute("Key", key));
             contentType.Add(new XAttribute("Alias", alias));
 
+            var propertiesNode = GetPropertiesNode(contentType);
+
+            if (propertiesNode != null)
+            {
+                var properties = propertiesNode.Elements("GenericProperty");
+
+                foreach (var property in properties)
+                {
+                    var propertyType = GetPropertyType(property);
+
+                    if (propertyType != string.Empty)
+                    {
+                        propertyType = PropertyTypeHelper.GetUpdatedAlias(propertyType);
+                    }
+
+                    property.Element("Type").SetValue(propertyType);
+                }
+            }
+
             return base.DeserializeCore(contentType);
         }
 
         private XElement GetInfoNode(XElement node)
         {
             return node.Element("Info");
+        }
+
+        private XElement GetPropertiesNode(XElement node)
+        {
+            return node.Element("GenericProperties");
         }
 
         private Guid GetKey(XElement node)
@@ -68,6 +93,11 @@ namespace Our.Umbraco.GoldenGate.uSync.Serialization
         private string GetAlias(XElement node)
         {
             return node.Element("Alias").ValueOrDefault(string.Empty);
+        }
+
+        private string GetPropertyType(XElement node)
+        {
+            return node.Element("Type").ValueOrDefault(string.Empty);
         }
     }
 }
