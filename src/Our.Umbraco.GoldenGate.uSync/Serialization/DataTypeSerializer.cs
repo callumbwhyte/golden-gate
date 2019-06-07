@@ -62,7 +62,7 @@ namespace Our.Umbraco.GoldenGate.uSync.Serialization
             var preValues = PreValuesHelper.GetPrevalues(node, alias);
             if (preValues != null)
             {
-                node.Add(new XElement("Config", new XCData(JsonConvert.SerializeObject(preValues))));
+                node.Add(new XElement("Config", new XCData(JsonConvert.SerializeObject(preValues, Formatting.Indented))));
             }
 
             node.Add(new XAttribute("Alias", name));

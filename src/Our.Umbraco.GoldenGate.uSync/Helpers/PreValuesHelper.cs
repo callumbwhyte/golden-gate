@@ -1,6 +1,8 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Linq;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Our.Umbraco.GoldenGate.uSync.Models;
 using Umbraco.Core;
 using uSync8.Core.Extensions;
@@ -11,15 +13,17 @@ namespace Our.Umbraco.GoldenGate.uSync.Helpers
     {
         public static PreValues GetPrevalues(XElement node, string alias)
         {
-            //Only processing these 2 datatypes for now, to avoid surprises
+            //Only processing these datatypes for now, to avoid surprises
             if (alias == Constants.PropertyEditors.Aliases.CheckBoxList
                 || alias == Constants.PropertyEditors.Aliases.MultiNodeTreePicker
+                || alias == Constants.PropertyEditors.Aliases.Grid
                 || alias == Constants.PropertyEditors.Aliases.DropDownListFlexible)
             {
                 var prevaluesNode = node.Element("PreValues");
                 if (prevaluesNode != null)
                 {
                     var result = new PreValues();
+                    var valueList = new List<PreValue>();
 
                     var values = prevaluesNode.Elements("PreValue").ToList();
                     foreach (var v in values)
@@ -49,12 +53,30 @@ namespace Our.Umbraco.GoldenGate.uSync.Helpers
                                 result.Multiple = "1".Equals(GetNodeValue(v));
                                 break;
                             case "startNode":
-                                result.TreeSource = JsonConvert.DeserializeObject<Source>(GetNodeValue(v));
+                                result.TreeSource = JsonConvert.DeserializeObject(GetNodeValue(v));
+                                break;
+                            case "items":
+                                result.Items = JsonConvert.DeserializeObject(GetNodeValue(v));
+                                break;
+                            case "rte":
+                                result.Rte = JsonConvert.DeserializeObject(GetNodeValue(v));
+
+                                var toolbar = result.Rte.toolbar as JArray;
+                                if (toolbar != null)
+                                {
+                                    var match = toolbar.FirstOrDefault(j => j.ToString().Equals("code"));
+                                    if (match != null)
+                                    {
+                                        toolbar.Remove(match);
+                                        toolbar.Insert(0, new JValue("ace"));
+                                    }
+                                }
+
                                 break;
                             default:
                                 if (int.TryParse(preValueAlias, out var a))
                                 {
-                                    result.Items.Add(new PreValue
+                                    valueList.Add(new PreValue
                                     {
                                         Id = v.Attribute("SortOrder").ValueOrDefault(0),
                                         Value = GetNodeValue(v)
@@ -68,6 +90,10 @@ namespace Our.Umbraco.GoldenGate.uSync.Helpers
                         }
                     }
 
+                    if (valueList.Any())
+                    {
+                        result.Items = valueList;
+                    }
                     return result;
                 }
             }
@@ -80,11 +106,12 @@ namespace Our.Umbraco.GoldenGate.uSync.Helpers
             var nodeValue = node.FirstNode;
             if (nodeValue is XCData)
             {
-                return ((XCData)nodeValue).Value;
+                var cdata = ((XCData)nodeValue).Value;
+                return string.IsNullOrEmpty(cdata) ? null : cdata;
             }
             else
             {
-                return node.Value;
+                return string.IsNullOrEmpty(node.Value) ? null : node.Value;
             }
         }
     }

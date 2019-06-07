@@ -1,21 +1,31 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Our.Umbraco.GoldenGate.uSync.Models
 {
     public class PreValues
     {
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string Filter { get; set; }
 
-        public int MaxNumber { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public int? MaxNumber { get; set; }
 
-        public int MinNumber { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public int? MinNumber { get; set; }
 
-        public bool ShowOpen { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public bool? ShowOpen { get; set; }
 
-        public Source TreeSource { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public dynamic TreeSource { get; set; }
 
-        public bool Multiple { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public bool? Multiple { get; set; }
 
-        public List<PreValue> Items { get; set; } = new List<PreValue>();
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public dynamic Rte { get; set; }
+
+        public dynamic Items { get; set; }
     }
 }
