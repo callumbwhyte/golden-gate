@@ -1,4 +1,5 @@
 ﻿using System.Xml.Linq;
+using Newtonsoft.Json;
 using Our.Umbraco.GoldenGate.uSync.Helpers;
 using Umbraco.Core.Logging;
 using Umbraco.Core.Models;
@@ -57,6 +58,13 @@ namespace Our.Umbraco.GoldenGate.uSync.Serialization
             infoNode.Add(new XElement("Folder", folder));
 
             node.Add(infoNode);
+
+            var preValues = PreValuesHelper.GetPrevalues(node, alias);
+            if (preValues != null)
+            {
+                node.Add(new XElement("Config", new XCData(JsonConvert.SerializeObject(preValues))));
+            }
+
             node.Add(new XAttribute("Alias", name));
 
             return base.DeserializeCore(node);

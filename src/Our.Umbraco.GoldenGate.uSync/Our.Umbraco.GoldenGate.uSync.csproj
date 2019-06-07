@@ -140,7 +140,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\PreValuesHelper.cs" />
     <Compile Include="Helpers\PropertyTypeHelper.cs" />
+    <Compile Include="Models\PreValue.cs" />
+    <Compile Include="Models\PreValues.cs" />
+    <Compile Include="Models\Source.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Serialization\ContentTypeSerializer.cs" />
     <Compile Include="Serialization\DataTypeSerializer.cs" />
