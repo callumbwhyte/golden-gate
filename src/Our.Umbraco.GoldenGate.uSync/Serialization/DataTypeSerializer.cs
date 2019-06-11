@@ -1,5 +1,6 @@
 ﻿using System.Xml.Linq;
 using Newtonsoft.Json;
+using Our.Umbraco.GoldenGate.uSync.Convertors;
 using Our.Umbraco.GoldenGate.uSync.Helpers;
 using Umbraco.Core.Logging;
 using Umbraco.Core.Models;
@@ -32,6 +33,12 @@ namespace Our.Umbraco.GoldenGate.uSync.Serialization
                 && alias != string.Empty
                 && databaseType != string.Empty)
             {
+                if (VortoHelper.IsVortoType(node, alias))
+                {
+                    //By returning false, we indicate that this type is NOT to be imported
+                    return false;
+                }
+
                 return true;
             }
 
@@ -59,10 +66,13 @@ namespace Our.Umbraco.GoldenGate.uSync.Serialization
 
             node.Add(infoNode);
 
-            var preValues = PreValuesHelper.GetPrevalues(node, alias);
-            if (preValues != null)
+            //Check if there is a custom convertor for this dataType
+            var convertor = DataTypeConvertorFactory.GetConvertor(alias);
+            if (convertor != null)
             {
-                node.Add(new XElement("Config", new XCData(JsonConvert.SerializeObject(preValues, Formatting.Indented))));
+                var config = convertor.GetConfig(node, alias);
+
+                node.Add(new XElement("Config", new XCData(JsonConvert.SerializeObject(config, Formatting.Indented))));
             }
 
             node.Add(new XAttribute("Alias", name));

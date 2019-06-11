@@ -53,8 +53,8 @@ namespace Our.Umbraco.GoldenGate.uSync.Serialization
             contentType.Add(new XAttribute("Key", key));
             contentType.Add(new XAttribute("Alias", alias));
 
+            var hasVortoProperties = false;
             var propertiesNode = GetPropertiesNode(contentType);
-
             if (propertiesNode != null)
             {
                 var properties = propertiesNode.Elements("GenericProperty");
@@ -66,10 +66,30 @@ namespace Our.Umbraco.GoldenGate.uSync.Serialization
                     if (propertyType != string.Empty)
                     {
                         propertyType = PropertyTypeHelper.GetUpdatedAlias(propertyType);
+
+                        if (VortoHelper.IsVortoType(propertyType))
+                        {
+                            var propertyDefinition = GetPropertyDefinition(property);
+                            var vortoDataType = VortoHelper.GetDataType(propertyDefinition);
+                            if (vortoDataType != null)
+                            {
+                                propertyType = vortoDataType.PropertyEditorAlias;
+                                property.Element("Definition").SetValue(vortoDataType.Guid);
+
+                                hasVortoProperties = true;
+                                property.Add(new XElement("Variations", "Culture"));
+                            }
+                        }
                     }
 
                     property.Element("Type").SetValue(propertyType);
                 }
+            }
+
+            if (hasVortoProperties)
+            {
+                infoNode = GetInfoNode(contentType);
+                infoNode.Add(new XElement("Variations", "Culture"));
             }
 
             return base.DeserializeCore(contentType);
@@ -98,6 +118,11 @@ namespace Our.Umbraco.GoldenGate.uSync.Serialization
         private string GetPropertyType(XElement node)
         {
             return node.Element("Type").ValueOrDefault(string.Empty);
+        }
+
+        private Guid GetPropertyDefinition(XElement node)
+        {
+            return node.Element("Definition").ValueOrDefault(Guid.Empty);
         }
     }
 }
