@@ -145,6 +145,7 @@
     <Compile Include="Convertors\DataTypeConvertorFactory.cs" />
     <Compile Include="Convertors\GridConvertor.cs" />
     <Compile Include="Convertors\DropdownListFlexibleConvertor.cs" />
+    <Compile Include="Convertors\NestedContentConvertor.cs" />
     <Compile Include="Convertors\MultiNodeTreePickerConvertor.cs" />
     <Compile Include="Convertors\SEOCheckerSocialConvertor.cs" />
     <Compile Include="Helpers\PropertyTypeHelper.cs" />
