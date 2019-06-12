@@ -36,7 +36,7 @@ namespace Our.Umbraco.GoldenGate.uSync.Serialization
                 if (VortoHelper.IsVortoType(node, alias))
                 {
                     //By returning false, we indicate that this type is NOT to be imported
-                    return false;
+                    throw new System.Exception("Vorto datatype ignored. Do not worry.");
                 }
 
                 return true;

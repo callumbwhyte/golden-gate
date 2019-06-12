@@ -19,7 +19,6 @@ namespace Our.Umbraco.GoldenGate.uSync.Convertors
 
         public virtual dynamic GetConfig(XElement node, string alias)
         {
-            //Only processing these datatypes for now, to avoid surprises
             if (alias.Equals(GetPropertyAlias()))
             {
                 var prevaluesNode = GetPreValuesNode(node);
