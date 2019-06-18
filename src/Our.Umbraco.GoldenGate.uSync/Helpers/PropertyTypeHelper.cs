@@ -10,11 +10,13 @@ namespace Our.Umbraco.GoldenGate.uSync.Helpers
             { "Umbraco.ColorPickerAlias", Constants.PropertyEditors.Aliases.ColorPicker },
             { "Umbraco.ContentPicker2", Constants.PropertyEditors.Aliases.ContentPicker },
             { "Umbraco.Date", Constants.PropertyEditors.Aliases.DateTime },
+            { "Umbraco.DropDown", Constants.PropertyEditors.Aliases.DropDownListFlexible },
             { "Umbraco.NoEdit", Constants.PropertyEditors.Aliases.Label },
             { "Umbraco.MediaPicker2", Constants.PropertyEditors.Aliases.MediaPicker },
             { "Umbraco.MemberPicker2", Constants.PropertyEditors.Aliases.MemberPicker },
             { "Umbraco.MultiNodeTreePicker2", Constants.PropertyEditors.Aliases.MultiNodeTreePicker },
             { "Umbraco.RelatedLinks2", Constants.PropertyEditors.Aliases.MultiUrlPicker },
+            { "Umbraco.Textbox", Constants.PropertyEditors.Aliases.TextBox },
             { "Umbraco.TinyMCEv3", Constants.PropertyEditors.Aliases.TinyMce },
             { "Umbraco.TextboxMultiple", Constants.PropertyEditors.Aliases.TextArea }
         };

@@ -1,4 +1,6 @@
 ﻿using System.Xml.Linq;
+using Newtonsoft.Json;
+using Our.Umbraco.GoldenGate.uSync.Convertors;
 using Our.Umbraco.GoldenGate.uSync.Helpers;
 using Umbraco.Core.Logging;
 using Umbraco.Core.Models;
@@ -31,6 +33,12 @@ namespace Our.Umbraco.GoldenGate.uSync.Serialization
                 && alias != string.Empty
                 && databaseType != string.Empty)
             {
+                if (VortoHelper.IsVortoType(node, alias))
+                {
+                    //By returning false, we indicate that this type is NOT to be imported
+                    throw new System.Exception("Vorto datatype ignored. Do not worry.");
+                }
+
                 return true;
             }
 
@@ -57,6 +65,16 @@ namespace Our.Umbraco.GoldenGate.uSync.Serialization
             infoNode.Add(new XElement("Folder", folder));
 
             node.Add(infoNode);
+
+            //Check if there is a custom convertor for this dataType
+            var convertor = DataTypeConvertorFactory.GetConvertor(alias);
+            if (convertor != null)
+            {
+                var config = convertor.GetConfig(node, alias);
+
+                node.Add(new XElement("Config", new XCData(JsonConvert.SerializeObject(config, Formatting.Indented))));
+            }
+
             node.Add(new XAttribute("Alias", name));
 
             return base.DeserializeCore(node);

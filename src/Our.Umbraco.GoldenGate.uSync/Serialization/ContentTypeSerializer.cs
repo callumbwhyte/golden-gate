@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Linq;
 using Our.Umbraco.GoldenGate.uSync.Helpers;
 using Umbraco.Core.Logging;
@@ -43,41 +45,93 @@ namespace Our.Umbraco.GoldenGate.uSync.Serialization
 
         protected override SyncAttempt<IContentType> DeserializeCore(XElement node)
         {
-            var infoNode = GetInfoNode(node);
+            var contentType = CreateContentType(node);
 
-            var key = GetKey(infoNode);
-            var alias = GetAlias(infoNode);
+            return base.DeserializeCore(contentType);
+        }
 
-            var contentType = new XElement("ContentType", node.Attributes(), node.Elements());
+        public override SyncAttempt<IContentType> DeserializeSecondPass(IContentType item, XElement node, SerializerFlags flags)
+        {
+            var contentType = CreateContentType(node);
 
-            contentType.Add(new XAttribute("Key", key));
-            contentType.Add(new XAttribute("Alias", alias));
+            return base.DeserializeSecondPass(item, contentType, flags);
+        }
 
-            var propertiesNode = GetPropertiesNode(contentType);
-
-            if (propertiesNode != null)
+        private XElement CreateContentType(XElement node)
+        {
+            if (node.Name.LocalName == "DocumentType")
             {
-                var properties = propertiesNode.Elements("GenericProperty");
+                var infoNode = GetInfoNode(node);
 
-                foreach (var property in properties)
+                var key = GetKey(infoNode);
+                var alias = GetAlias(infoNode);
+
+                //Rename node
+                node.Name = "ContentType";
+
+                node.Add(new XAttribute("Key", key));
+                node.Add(new XAttribute("Alias", alias));
+
+                var hasVortoProperties = false;
+                var propertiesNode = GetPropertiesNode(node);
+                if (propertiesNode != null)
                 {
-                    var propertyType = GetPropertyType(property);
+                    var properties = propertiesNode.Elements("GenericProperty");
 
-                    if (propertyType != string.Empty)
+                    foreach (var property in properties)
                     {
-                        propertyType = PropertyTypeHelper.GetUpdatedAlias(propertyType);
-                    }
+                        var propertyType = GetPropertyType(property);
 
-                    property.Element("Type").SetValue(propertyType);
+                        if (propertyType != string.Empty)
+                        {
+                            propertyType = PropertyTypeHelper.GetUpdatedAlias(propertyType);
+
+                            if (VortoHelper.IsVortoType(propertyType))
+                            {
+                                var propertyDefinition = GetPropertyDefinition(property);
+                                var vortoDataType = VortoHelper.GetDataType(propertyDefinition);
+                                if (vortoDataType != null)
+                                {
+                                    propertyType = vortoDataType.PropertyEditorAlias;
+                                    property.Element("Definition").SetValue(vortoDataType.Guid);
+
+                                    hasVortoProperties = true;
+                                    property.Add(new XElement("Variations", "Culture"));
+                                }
+                            }
+                        }
+
+                        property.Element("Type").SetValue(propertyType);
+                    }
+                }
+
+                if (hasVortoProperties)
+                {
+                    infoNode.Add(new XElement("Variations", "Culture"));
+                }
+
+                //Rename Structure/DocumentType to Structure/ContentType
+                var structureNode = GetStructureNode(node);
+                if (structureNode != null)
+                {
+                    foreach (var docTypeNode in structureNode.Elements("DocumentType"))
+                    {
+                        docTypeNode.Name = "ContentType";
+                    }
                 }
             }
 
-            return base.DeserializeCore(contentType);
+            return node;
         }
 
         private XElement GetInfoNode(XElement node)
         {
             return node.Element("Info");
+        }
+
+        private XElement GetStructureNode(XElement node)
+        {
+            return node.Element("Structure");
         }
 
         private XElement GetPropertiesNode(XElement node)
@@ -98,6 +152,11 @@ namespace Our.Umbraco.GoldenGate.uSync.Serialization
         private string GetPropertyType(XElement node)
         {
             return node.Element("Type").ValueOrDefault(string.Empty);
+        }
+
+        private Guid GetPropertyDefinition(XElement node)
+        {
+            return node.Element("Definition").ValueOrDefault(Guid.Empty);
         }
     }
 }
