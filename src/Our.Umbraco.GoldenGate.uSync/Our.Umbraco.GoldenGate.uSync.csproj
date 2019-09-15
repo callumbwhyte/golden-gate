@@ -141,6 +141,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helpers\PropertyTypeHelper.cs" />
+    <Compile Include="Composing\ComposerExtensions.cs" />
+    <Compile Include="MapperComposer.cs" />
+    <Compile Include="Mappers\Collections\PropertyTypeMapperCollection.cs" />
+    <Compile Include="Mappers\Implement\CorePropertyTypeMapper.cs" />
+    <Compile Include="Mappers\IPropertyTypeMapper.cs" />
+    <Compile Include="Mappers\MapperFactory.cs" />
+    <Compile Include="Mappers\PropertyTypeMapperBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Serialization\ContentTypeSerializer.cs" />
     <Compile Include="Serialization\DataTypeSerializer.cs" />
