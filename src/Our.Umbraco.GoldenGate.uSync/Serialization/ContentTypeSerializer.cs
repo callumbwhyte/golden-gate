@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Linq;
+using Our.Umbraco.GoldenGate.uSync.Extensions;
 using Our.Umbraco.GoldenGate.uSync.Mappers;
 using Umbraco.Core.Logging;
 using Umbraco.Core.Models;
 using Umbraco.Core.Services;
 using uSync8.Core;
-using uSync8.Core.Extensions;
 using uSync8.Core.Models;
 using uSync8.Core.Serialization;
 using Serializers = uSync8.Core.Serialization.Serializers;
@@ -26,12 +27,12 @@ namespace Our.Umbraco.GoldenGate.uSync.Serialization
 
         public override bool IsValid(XElement node)
         {
-            var infoNode = GetInfoNode(node);
+            var infoNode = node.GetElement("Info");
 
             if (infoNode != null)
             {
-                var key = GetKey(infoNode);
-                var alias = GetAlias(infoNode);
+                var key = infoNode.GetValue<Guid>("Key");
+                var alias = infoNode.GetValue("Alias");
 
                 if (node.Name.LocalName == "DocumentType"
                     && key != Guid.Empty
@@ -46,23 +47,26 @@ namespace Our.Umbraco.GoldenGate.uSync.Serialization
 
         protected override SyncAttempt<IContentType> DeserializeCore(XElement node)
         {
-            var infoNode = GetInfoNode(node);
+            var infoNode = node.GetElement("Info");
 
-            var key = GetKey(infoNode);
-            var alias = GetAlias(infoNode);
+            var key = infoNode.GetValue<Guid>("Key");
+            var alias = infoNode.GetValue("Alias");
 
             var contentType = new XElement("ContentType", node.Attributes(), node.Elements());
 
-            contentType.Add(new XAttribute("Key", key));
-            contentType.Add(new XAttribute("Alias", alias));
+            contentType.AddAttribute("Key", key);
+            contentType.AddAttribute("Alias", alias);
 
-            var propertiesNode = GetPropertiesNode(contentType);
+            var propertiesNode = contentType.GetElement("GenericProperties");
 
             if (propertiesNode != null)
             {
-                var properties = propertiesNode.Elements("GenericProperty");
+                var properties = propertiesNode.GetElements("GenericProperty");
 
-                MapProperties(properties);
+                if (properties.Any() == true)
+                {
+                    MapProperties(properties);
+                }
             }
 
             return base.DeserializeCore(contentType);
@@ -72,7 +76,7 @@ namespace Our.Umbraco.GoldenGate.uSync.Serialization
         {
             foreach (var property in properties)
             {
-                var propertyTypeAlias = GetPropertyType(property);
+                var propertyTypeAlias = property.GetValue("Type");
 
                 var mapper = _mapperFactory.GetPropertyTypeMapper(propertyTypeAlias);
 
@@ -81,33 +85,8 @@ namespace Our.Umbraco.GoldenGate.uSync.Serialization
                     propertyTypeAlias = mapper.ConvertAlias(propertyTypeAlias);
                 }
 
-                property.Element("Type").SetValue(propertyTypeAlias);
+                property.GetElement("Type").SetValue(propertyTypeAlias);
             }
-        }
-
-        private XElement GetInfoNode(XElement node)
-        {
-            return node.Element("Info");
-        }
-
-        private XElement GetPropertiesNode(XElement node)
-        {
-            return node.Element("GenericProperties");
-        }
-
-        private Guid GetKey(XElement node)
-        {
-            return node.Element("Key").ValueOrDefault(Guid.Empty);
-        }
-
-        private string GetAlias(XElement node)
-        {
-            return node.Element("Alias").ValueOrDefault(string.Empty);
-        }
-
-        private string GetPropertyType(XElement node)
-        {
-            return node.Element("Type").ValueOrDefault(string.Empty);
         }
     }
 }

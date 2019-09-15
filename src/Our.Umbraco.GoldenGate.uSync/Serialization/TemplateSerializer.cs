@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Xml.Linq;
+using Our.Umbraco.GoldenGate.uSync.Extensions;
 using Umbraco.Core.Logging;
 using Umbraco.Core.Models;
 using Umbraco.Core.Services;
 using uSync8.Core;
-using uSync8.Core.Extensions;
 using uSync8.Core.Models;
 using uSync8.Core.Serialization;
 using Serializers = uSync8.Core.Serialization.Serializers;
@@ -22,8 +22,8 @@ namespace Our.Umbraco.GoldenGate.uSync.Serialization
 
         public override bool IsValid(XElement node)
         {
-            var key = GetKey(node);
-            var alias = GetAlias(node);
+            var key = node.GetValue<Guid>("Key");
+            var alias = node.GetValue("Alias");
 
             if (node.Name.LocalName == ItemType
                 && key != Guid.Empty
@@ -37,31 +37,16 @@ namespace Our.Umbraco.GoldenGate.uSync.Serialization
 
         protected override SyncAttempt<ITemplate> DeserializeCore(XElement node)
         {
-            var key = GetKey(node);
-            var alias = GetAlias(node);
-            var parent = GetParent(node);
+            var key = node.GetValue<Guid>("Key");
+            var alias = node.GetValue("Alias");
+            var parent = node.GetValue("Master");
 
-            node.Add(new XAttribute("Key", key));
-            node.Add(new XAttribute("Alias", alias));
+            node.AddAttribute("Key", key);
+            node.AddAttribute("Alias", alias);
 
-            node.Add(new XElement("Parent", parent));
+            node.AddElement("Parent", parent);
 
             return base.DeserializeCore(node);
-        }
-
-        private Guid GetKey(XElement node)
-        {
-            return node.Element("Key").ValueOrDefault(Guid.Empty);
-        }
-
-        private string GetAlias(XElement node)
-        {
-            return node.Element("Alias").ValueOrDefault(string.Empty);
-        }
-
-        private string GetParent(XElement node)
-        {
-            return node.Element("Master").ValueOrDefault(string.Empty);
         }
     }
 }

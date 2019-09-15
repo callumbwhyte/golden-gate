@@ -1,4 +1,5 @@
 ﻿using System.Xml.Linq;
+using Our.Umbraco.GoldenGate.uSync.Extensions;
 using Our.Umbraco.GoldenGate.uSync.Mappers;
 using Umbraco.Core.Logging;
 using Umbraco.Core.Models;
@@ -23,9 +24,9 @@ namespace Our.Umbraco.GoldenGate.uSync.Serialization
 
         public override bool IsValid(XElement node)
         {
-            var name = GetName(node);
-            var alias = GetAlias(node);
-            var databaseType = GetDatabaseType(node);
+            var name = node.GetAttribute("Name");
+            var alias = node.GetAttribute("Id");
+            var databaseType = node.GetAttribute("DatabaseType");
 
             if (node.Name.LocalName == this.ItemType
                 && name != string.Empty
@@ -40,10 +41,11 @@ namespace Our.Umbraco.GoldenGate.uSync.Serialization
 
         protected override SyncAttempt<IDataType> DeserializeCore(XElement node)
         {
-            var name = GetName(node);
-            var editorAlias = GetAlias(node);
-            var databaseType = GetDatabaseType(node);
-            var folder = GetFolder(node);
+            var name = node.GetAttribute("Name");
+            var editorAlias = node.GetAttribute("Id");
+            var databaseType = node.GetAttribute("DatabaseType");
+            var folder = node.GetAttribute("Folder");
+            var settings = node.GetElement("PreValues");
 
             var mapper = _mapperFactory.GetPropertyTypeMapper(editorAlias);
 
@@ -55,36 +57,16 @@ namespace Our.Umbraco.GoldenGate.uSync.Serialization
 
             var infoNode = new XElement("Info");
 
-            infoNode.Add(new XElement("Name", name));
-            infoNode.Add(new XElement("EditorAlias", editorAlias));
-            infoNode.Add(new XElement("DatabaseType", databaseType));
-            infoNode.Add(new XElement("Folder", folder));
+            infoNode.AddElement("Name", name);
+            infoNode.AddElement("EditorAlias", editorAlias);
+            infoNode.AddElement("DatabaseType", databaseType);
+            infoNode.AddElement("Folder", folder);
 
             node.Add(infoNode);
 
-            node.Add(new XAttribute("Alias", name));
+            node.AddAttribute("Alias", name);
 
             return base.DeserializeCore(node);
-        }
-
-        private string GetName(XElement node)
-        {
-            return node.Attribute("Name").ValueOrDefault(string.Empty);
-        }
-
-        private string GetAlias(XElement node)
-        {
-            return node.Attribute("Id").ValueOrDefault(string.Empty);
-        }
-
-        private string GetDatabaseType(XElement node)
-        {
-            return node.Attribute("DatabaseType").ValueOrDefault(string.Empty);
-        }
-
-        private string GetFolder(XElement node)
-        {
-            return node.Attribute("Folder").ValueOrDefault(string.Empty);
         }
     }
 }

@@ -142,6 +142,7 @@
   <ItemGroup>
     <Compile Include="Composing\ComposerExtensions.cs" />
     <Compile Include="MapperComposer.cs" />
+    <Compile Include="Extensions\XmlExtensions.cs" />
     <Compile Include="Mappers\Collections\PropertyTypeMapperCollection.cs" />
     <Compile Include="Mappers\Implement\CorePropertyTypeMapper.cs" />
     <Compile Include="Mappers\IPropertyTypeMapper.cs" />
