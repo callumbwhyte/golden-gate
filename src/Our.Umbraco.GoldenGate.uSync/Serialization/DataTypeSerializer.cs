@@ -1,4 +1,5 @@
-﻿using System.Xml.Linq;
+﻿using System.Linq;
+using System.Xml.Linq;
 using Our.Umbraco.GoldenGate.uSync.Extensions;
 using Our.Umbraco.GoldenGate.uSync.Mappers;
 using Umbraco.Core.Logging;
@@ -53,6 +54,8 @@ namespace Our.Umbraco.GoldenGate.uSync.Serialization
             {
                 editorAlias = mapper.ConvertAlias(editorAlias);
                 databaseType = mapper.ConvertDatabaseType(databaseType);
+
+                MapPreValues(settings, mapper);
             }
 
             var infoNode = new XElement("Info");
@@ -67,6 +70,17 @@ namespace Our.Umbraco.GoldenGate.uSync.Serialization
             node.AddAttribute("Alias", name);
 
             return base.DeserializeCore(node);
+        }
+
+        private void MapPreValues(XElement settings, IPropertyTypeMapper mapper)
+        {
+            var preValues = settings.GetElements("PreValue")
+                .ToDictionary(x => x.GetAttribute("Alias"), x => x.Value);
+
+            if (preValues.Any() == true)
+            {
+                settings.SetValue(mapper.ConvertPreValues(preValues));
+            }
         }
     }
 }

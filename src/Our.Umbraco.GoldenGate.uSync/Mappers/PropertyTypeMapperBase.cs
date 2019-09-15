@@ -1,4 +1,5 @@
-﻿using System;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Our.Umbraco.GoldenGate.uSync.Mappers
 {
@@ -16,9 +17,9 @@ namespace Our.Umbraco.GoldenGate.uSync.Mappers
             return databaseType;
         }
 
-        public virtual object ConvertPreValues(object preValues)
+        public virtual string ConvertPreValues(IDictionary<string, string> preValues)
         {
-            return preValues;
+            return JsonConvert.SerializeObject(preValues);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.Generic;
 
 namespace Our.Umbraco.GoldenGate.uSync.Mappers
 {
@@ -8,6 +8,6 @@ namespace Our.Umbraco.GoldenGate.uSync.Mappers
 
         string ConvertAlias(string alias);
         string ConvertDatabaseType(string databaseType);
-        object ConvertPreValues(object preValues);
+        string ConvertPreValues(IDictionary<string, string> preValues);
     }
 }
