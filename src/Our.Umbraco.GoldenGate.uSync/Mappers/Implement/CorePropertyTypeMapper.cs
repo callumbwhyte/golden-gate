@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using Umbraco.Core;
 
-namespace Our.Umbraco.GoldenGate.uSync.Helpers
+namespace Our.Umbraco.GoldenGate.uSync.Mappers.Implement
 {
-    public static class PropertyTypeHelper
+    public class CorePropertyTypeMapper : PropertyTypeMapperBase
     {
         private static IDictionary<string, string> _aliases = new Dictionary<string, string>()
         {
@@ -19,14 +19,19 @@ namespace Our.Umbraco.GoldenGate.uSync.Helpers
             { "Umbraco.TextboxMultiple", Constants.PropertyEditors.Aliases.TextArea }
         };
 
-        public static string GetUpdatedAlias(string oldAlias)
+        public override bool IsMapper(string alias)
         {
-            if (_aliases.ContainsKey(oldAlias) == true)
+            return _aliases.ContainsKey(alias) == true;
+        }
+
+        public override string ConvertAlias(string alias)
+        {
+            if (_aliases.ContainsKey(alias) == true)
             {
-                return _aliases[oldAlias];
+                return _aliases[alias];
             }
 
-            return oldAlias;
+            return alias;
         }
     }
 }

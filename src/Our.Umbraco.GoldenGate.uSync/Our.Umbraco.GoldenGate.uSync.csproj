@@ -140,7 +140,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Helpers\PropertyTypeHelper.cs" />
     <Compile Include="Composing\ComposerExtensions.cs" />
     <Compile Include="MapperComposer.cs" />
     <Compile Include="Mappers\Collections\PropertyTypeMapperCollection.cs" />
