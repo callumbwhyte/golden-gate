@@ -5,15 +5,12 @@ using Our.Umbraco.GoldenGate.uSync.Mappers;
 using Umbraco.Core.Logging;
 using Umbraco.Core.Models;
 using Umbraco.Core.Services;
-using uSync8.Core;
 using uSync8.Core.Models;
-using uSync8.Core.Serialization;
 using Serializers = uSync8.Core.Serialization.Serializers;
 
 namespace Our.Umbraco.GoldenGate.uSync.Serialization
 {
-    [SyncSerializer("C06E92B7-7440-49B7-B4D2-AF2BF4F3D75D", "DataType Serializer", uSyncConstants.Serialization.DataType)]
-    public class DataTypeSerializer : Serializers.DataTypeSerializer, ISyncSerializer<IDataType>
+    public class DataTypeSerializer : Serializers.DataTypeSerializer
     {
         private readonly MapperFactory _mapperFactory;
 

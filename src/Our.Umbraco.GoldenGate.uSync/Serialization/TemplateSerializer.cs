@@ -4,15 +4,12 @@ using Our.Umbraco.GoldenGate.uSync.Extensions;
 using Umbraco.Core.Logging;
 using Umbraco.Core.Models;
 using Umbraco.Core.Services;
-using uSync8.Core;
 using uSync8.Core.Models;
-using uSync8.Core.Serialization;
 using Serializers = uSync8.Core.Serialization.Serializers;
 
 namespace Our.Umbraco.GoldenGate.uSync.Serialization
 {
-    [SyncSerializer("D0E0769D-CCAE-47B4-AD34-4182C587B08A", "Template Serializer", uSyncConstants.Serialization.Template)]
-    public class TemplateSerializer : Serializers.TemplateSerializer, ISyncSerializer<ITemplate>
+    public class TemplateSerializer : Serializers.TemplateSerializer
     {
         public TemplateSerializer(IEntityService entityService, ILogger logger, IFileService fileService)
             : base(entityService, logger, fileService)
