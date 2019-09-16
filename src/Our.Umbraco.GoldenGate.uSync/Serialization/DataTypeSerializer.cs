@@ -6,6 +6,7 @@ using Umbraco.Core.Logging;
 using Umbraco.Core.Models;
 using Umbraco.Core.Services;
 using uSync8.Core;
+using uSync8.Core.DataTypes;
 using uSync8.Core.Models;
 using uSync8.Core.Serialization;
 using Serializers = uSync8.Core.Serialization.Serializers;
@@ -17,8 +18,8 @@ namespace Our.Umbraco.GoldenGate.uSync.Serialization
     {
         private readonly MapperFactory _mapperFactory;
 
-        public DataTypeSerializer(IEntityService entityService, ILogger logger, IDataTypeService dataTypeService, MapperFactory mapperFactory)
-            : base(entityService, logger, dataTypeService)
+        public DataTypeSerializer(IEntityService entityService, ILogger logger, IDataTypeService dataTypeService, ConfigurationSerializerCollection configurationSerializers, MapperFactory mapperFactory)
+            : base(entityService, logger, dataTypeService, configurationSerializers)
         {
             _mapperFactory = mapperFactory;
         }
