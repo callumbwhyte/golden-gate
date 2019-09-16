@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.28307.168
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Our.Umbraco.GoldenGate", "Our.Umbraco.GoldenGate\Our.Umbraco.GoldenGate.csproj", "{C228CEB6-5615-42CD-A19E-EE6F8862B26D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Our.Umbraco.GoldenGate.uSync", "Our.Umbraco.GoldenGate.uSync\Our.Umbraco.GoldenGate.uSync.csproj", "{DE734F44-8B2B-43E5-9F21-86E3561FF743}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Our.Umbraco.GoldenGate.uSync", "Our.Umbraco.GoldenGate.uSync\Our.Umbraco.GoldenGate.uSync.csproj", "{2973A864-4622-4246-9A05-CF67E77D750F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{C228CEB6-5615-42CD-A19E-EE6F8862B26D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C228CEB6-5615-42CD-A19E-EE6F8862B26D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C228CEB6-5615-42CD-A19E-EE6F8862B26D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DE734F44-8B2B-43E5-9F21-86E3561FF743}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DE734F44-8B2B-43E5-9F21-86E3561FF743}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DE734F44-8B2B-43E5-9F21-86E3561FF743}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DE734F44-8B2B-43E5-9F21-86E3561FF743}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2973A864-4622-4246-9A05-CF67E77D750F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2973A864-4622-4246-9A05-CF67E77D750F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2973A864-4622-4246-9A05-CF67E77D750F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2973A864-4622-4246-9A05-CF67E77D750F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
