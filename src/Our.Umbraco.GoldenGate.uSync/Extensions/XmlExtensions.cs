@@ -9,12 +9,12 @@ namespace Our.Umbraco.GoldenGate.uSync.Extensions
     {
         public static string GetValue(this XElement element, string name)
         {
-            return element.ValueOrDefault(string.Empty);
+            return element.Element(name).ValueOrDefault(string.Empty);
         }
 
         public static T GetValue<T>(this XElement element, string name)
         {
-            return element.ValueOrDefault(default(T));
+            return element.Element(name).ValueOrDefault(default(T));
         }
 
         public static XElement GetElement(this XElement element, string name)
