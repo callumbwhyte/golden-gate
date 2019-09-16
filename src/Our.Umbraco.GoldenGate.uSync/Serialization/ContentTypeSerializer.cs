@@ -7,11 +7,14 @@ using Our.Umbraco.GoldenGate.uSync.Mappers;
 using Umbraco.Core.Logging;
 using Umbraco.Core.Models;
 using Umbraco.Core.Services;
+using uSync8.Core;
 using uSync8.Core.Models;
+using uSync8.Core.Serialization;
 using Serializers = uSync8.Core.Serialization.Serializers;
 
 namespace Our.Umbraco.GoldenGate.uSync.Serialization
 {
+    [SyncSerializer("B3F7F247-6077-406D-8480-DB1004C8211C", "ContentTypeSerializer", uSyncConstants.Serialization.ContentType)]
     public class ContentTypeSerializer : Serializers.ContentTypeSerializer
     {
         private readonly MapperFactory _mapperFactory;
